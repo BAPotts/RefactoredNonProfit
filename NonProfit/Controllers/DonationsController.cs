@@ -19,36 +19,54 @@ namespace NonProfit.Controllers
 
       return View(_db.Donations.ToList());
     }
-  
-    public ActionResult Details( int id )
+
+    public ActionResult Details(int id)
     {
-      var thisDonation = _db.Donations.Include(donation => donation.Donors).ThenInclude(join =>join.Donor).FirstOrDefault(donation => donation.DonationId == id);
+      var thisDonation = _db.Donations.Include(donation => donation.Donors).ThenInclude(join => join.Donor).FirstOrDefault(donation => donation.DonationId == id);
       return View(thisDonation);
     }
     ////////
     public ActionResult Create()
     {
-    ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
-    return View();
+      ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
+      return View();
     }
     [HttpPost]
     public ActionResult Create(Donation donation, int DonorId)
     {
       _db.Donations.Add(donation);
-      if (DonorId !=0)
+      if (DonorId != 0)
       {
-        _db.DonorDonation.Add(new DonorDonation() {DonorId = DonorId, DonationId = donation.DonationId });
+        _db.DonorDonation.Add(new DonorDonation() { DonorId = DonorId, DonationId = donation.DonationId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-    // ////////
-    // public ActionResult Edit (int id)
-    // {
-    //   var thisDonation = _db.Donations.FirstOrDefault(Donations => Donations.DonationId == id);
-    //   ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
-    //   return View(thisDonation);
-    // }
+    ////////
+    public ActionResult Edit(int id)
+    {
+      var thisDonation = _db.Donations.FirstOrDefault(Donations => Donations.DonationId == id);
+      ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
+      return View(thisDonation);
+    }
+    [HttpPost]
+    public ActionResult Edit(Donation donation, int DonorId)
+    {
+      if (DonorId != 0)
+      {
+        _db.DonorDonation.Add(new DonorDonation() { DonorId = DonorId, DonationId = donation.DonationId });
+      }
+      _db.Entry(donation).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+    public ActionResult AddDonor(int id)
+    {
+      var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
+      ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
+      return View(thisDonation);
+    }
+    ////////
     // ////////
     // public ActionResult Delete(int id)
     // {
@@ -65,14 +83,7 @@ namespace NonProfit.Controllers
     //   return RedirectToAction("Index");
     // }
     // ////////
-    // [HttpPost]
-    // public ActionResult Edit(Donation donation)
-    // {
-    //   _db.Entry(donation).State = EntityState.Modified;
-    //   _db.SaveChanges();
-    //   return RedirectToAction("Index");
-    // }
-    // ////////
-    
+
+
   }
 }
