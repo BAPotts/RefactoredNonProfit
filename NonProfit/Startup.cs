@@ -17,31 +17,24 @@ namespace NonProfit
           .AddJsonFile("appsettings.json");
       Configuration = builder.Build();
     }
-
     public IConfigurationRoot Configuration { get; set; }
-
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc();
-
       services.AddEntityFrameworkMySql()
         .AddDbContext<NonProfitContext>(options => options
         .UseMySql(Configuration["ConnectionStrings:DefaultConnection"]));
     }
-
     public void Configure(IApplicationBuilder app)
     {
       app.UseStaticFiles();
-
       app.UseDeveloperExceptionPage();
-
       app.UseMvc(routes =>
       {
         routes.MapRoute(
           name: "default",
           template: "{controller=Home}/{action=Index}/{id?}");
       });
-
       app.Run(async (context) =>
       {
         await context.Response.WriteAsync("Error has occured upon the last entry. Please contact the developer.");

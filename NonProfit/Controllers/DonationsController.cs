@@ -14,12 +14,13 @@ namespace NonProfit.Controllers
     {
       _db = db;
     }
+    ////////
     public ActionResult Index()
     {
 
       return View(_db.Donations.ToList());
     }
-
+    ////////
     public ActionResult Details(int id)
     {
       var thisDonation = _db.Donations.Include(donation => donation.Donors).ThenInclude(join => join.Donor).FirstOrDefault(donation => donation.DonationId == id);
@@ -31,6 +32,7 @@ namespace NonProfit.Controllers
       ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
       return View();
     }
+    ////////
     [HttpPost]
     public ActionResult Create(Donation donation, int DonorId)
     {
@@ -49,6 +51,7 @@ namespace NonProfit.Controllers
       ViewBag.DonorId = new SelectList(_db.Donors, "DonorId", "Name");
       return View(thisDonation);
     }
+    ////////
     [HttpPost]
     public ActionResult Edit(Donation donation, int DonorId)
     {
@@ -60,6 +63,7 @@ namespace NonProfit.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+    ////////
     public ActionResult AddDonor(int id)
     {
       var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
@@ -67,23 +71,39 @@ namespace NonProfit.Controllers
       return View(thisDonation);
     }
     ////////
-    // ////////
-    // public ActionResult Delete(int id)
-    // {
-    //   var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
-    //   return View(thisDonation);
-    // }
-    // ////////
-    // [HttpPost, ActionName("Delete")]
-    // public ActionResult DeleteConfirmed(int id)
-    // {
-    //   var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
-    //   _db.Donations.Remove(thisDonation);
-    //   _db.SaveChanges();
-    //   return RedirectToAction("Index");
-    // }
-    // ////////
-
-
+    [HttpPost]
+    public ActionResult AddDonor(Donation donation, int DonorId)
+    {
+      if (DonorId != 0)
+      {
+        _db.DonorDonation.Add(new DonorDonation() { DonorId = DonorId, DonationId = donation.DonationId });
+      }
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+    ////////
+    public ActionResult Delete(int id)
+    {
+      var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
+      return View(thisDonation);
+    }
+    ////////
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      var thisDonation = _db.Donations.FirstOrDefault(donations => donations.DonationId == id);
+      _db.Donations.Remove(thisDonation);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+    ////////
+    [HttpPost]
+    public ActionResult DeleteCategory(int joinId)
+    {
+      var joinEntry = _db.DonorDonation.FirstOrDefault(entry => entry.DonorDonationId == joinId);
+      _db.DonorDonation.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }

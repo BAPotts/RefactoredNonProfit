@@ -18,9 +18,15 @@ else
   @foreach(var join in Model.Donors)
   {
     <li>@join.Donor.Name</li>
+    @using (Html.BeginForm("DeleteCategory", "Donations"))
+    {
+      @Html.Hidden("joinId", @join.DonorDonationId)
+      <input type="submit" value="Delete"/>
+    }
   }
   </ul>
 }
 <p>@Html.ActionLink("Back to list", "Index")</p>
 <p>@Html.ActionLink("Edit Donation", "Edit", new { id = Model.DonationId })</p>
 <p>@Html.ActionLink("Delete Donation", "Delete", new { id = Model.DonationId })</p>
+<p>@Html.ActionLink("Add a Donor", "AddDonor", new {id = Model.DonationId})</p>
