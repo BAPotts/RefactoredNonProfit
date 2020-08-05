@@ -8,11 +8,11 @@ namespace NonProfit.Models
   {
     public Donation()
     {
-      this.Donors = HashSet<DonorDonation>();
+      this.Donors = new HashSet<DonorDonation>();
     }
     public int DonationId { get; set; }
     public int Money { get; set; }
-    public int DonorId { get; set; }
-    public virtual Donor Donor { get; set; }
+    // public int DonorId { get; set; }
+  public ICollection<DonorDonation> Donors {get;}
   }
 }

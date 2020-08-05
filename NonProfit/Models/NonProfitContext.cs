@@ -6,6 +6,7 @@ namespace NonProfit.Models
   {
     public virtual DbSet<Donor> Donors { get; set; }
     public DbSet<Donation> Donations { get; set; }
+    public DbSet<DonorDonation> DonorDonation {get; set;}
 
     public NonProfitContext(DbContextOptions options) : base(options) { }
   }

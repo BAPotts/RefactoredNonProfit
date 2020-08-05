@@ -2,7 +2,6 @@
   Layout = "_Layout";
 }
 
-@using NonProfit.Models;
 @model NonProfit.Models.Donor;
 
 <h2>Donor Details</h2>
@@ -14,12 +13,17 @@
 {
   <p>no donations found</p>
 }
-
-@foreach (Donation donation in @Model.Donations)
+else
 {
-  <li>Donation($): @donation.Money</li>
+<h4>Donations the Donor has Made:</h4>
+<ul>
+
+@foreach (var join in Model.Donations)
+{
+  <li>@join.Donation.Money</li>
 }
 </ul>
+}
 
 <p>@Html.ActionLink("Back to Donors", "Index")</p>
 <p>@Html.ActionLink("Edit Donor", "Edit", new { id = Model.DonorId })</p>

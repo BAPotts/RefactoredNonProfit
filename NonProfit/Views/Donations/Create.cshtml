@@ -11,7 +11,7 @@
     @Html.LabelFor(model => model.Money)
     @Html.TextBoxFor(model => model.Money)<br><br>
 
-    @Html.LabelFor(model => model.Donor)
+    @Html.Label("Select Donor")
     @Html.DropDownList("DonorId")<br><br>
 
     <input type="submit" value="Add new donation" class="btn btn-default" />
